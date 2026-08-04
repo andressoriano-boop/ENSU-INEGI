@@ -29,7 +29,7 @@ jobs:
       - name: Install packages
         run: |
           python -m pip install --upgrade pip 
-          pip install datetime requests zipfile io pandas openpyxl
+          pip install datetime requests zipfile36 io pandas openpyxl
       
       # Correr codigo
       - name: Ejecutar python
