@@ -19,5 +19,4 @@ jobs:
     - name: Repositorio
       uses: actions/checkout@v4
     - name: imprimir accion
-      run: |
-        echo: "hola desde github"
+      run: $ echo "hola desde github"
