@@ -29,11 +29,11 @@ jobs:
       - name: Install packages
         run: |
           python -m pip install --upgrade pip 
-          pip install datetime requests zipfile36 io pandas openpyxl
+          pip install datetime requests zipfile36 pandas openpyxl
       
       # Correr codigo
       - name: Ejecutar python
-        run: python extraer.py
+        run: python Extraer.py
 
       # Guardar cambios
       - name: Commit files
