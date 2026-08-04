@@ -1,12 +1,11 @@
 # Extraer datos ENSU
 name: ExtraerENSU
 
-# Controls when the action will run.
-#on:
-#  schedule:
-#    - cron: '0 17 * * *'
+# Controlar cuando correr el codigo, schedule para hora determinada y workflow para correrlo con boton
 on:
-  workflow_dispatch #para correrlo manualmente
+  schedule:
+    - cron: '0 17 * * *' 
+  workflow_dispatch: 
 
 jobs:
   extraer:
@@ -14,9 +13,36 @@ jobs:
     # Tipo de computadora a utilizar
     runs-on: windows-latest
 
-    # Cargar python y el checkout (repositorio)
+    # Pasos a realizar
     steps:
-    - name: Repositorio
-      uses: actions/checkout@v4
-    - name: imprimir accion
-      run: $ echo "hola desde github"
+      # Descargar el repositorio
+      - name: Repositorio
+        uses: actions/checkout@v4
+      
+      # Instalar Python
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      # Instalar paquetes
+      - name: Install packages
+        run: |
+          python -m pip install --upgrade pip 
+          pip install datetime requests zipfile io pandas openpyxl
+      
+      # Correr codigo
+      - name: Ejecutar python
+        run: python extraer.py
+
+      # Guardar cambios
+      - name: Commit files
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "actions@github.com"
+          git add data/*
+          git commit -m "Actualización" || echo "No hay cambios"
+          git push origin main
+        env:
+          REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+          username: github-actions
