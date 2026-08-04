@@ -1,0 +1,23 @@
+# Extraer datos ENSU
+name: ExtraerENSU
+
+# Controls when the action will run.
+on:
+  schedule:
+    - cron: '0 17 * * *'
+#on:
+#  workflow_dispatch #para correrlo manualmente
+
+jobs:
+  extraer:
+    name: Extraer datos del ENSU y guardarlos
+    # Tipo de computadora a utilizar
+    runs-on: windows-latest
+
+    # Cargar python y el checkout (repositorio)
+    steps:
+    - name: Repositorio
+      uses: actions/checkout@v4
+    - name: imprimir accion
+      run: |
+        echo: "hola desde github"
