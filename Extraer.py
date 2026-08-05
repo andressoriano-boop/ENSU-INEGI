@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 import requests
 import zipfile
@@ -9,6 +9,18 @@ import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils import get_column_letter
+
+calendario = {
+    "2026-10-23",
+    "2027-01-22",
+    "2027-04-23",
+}
+
+if date.today().isoformat() not in calendario:
+    print("No es fecha de actualización de datos.")
+    exit(0)
+
+print("Hoy es fecha de actualización de datos, se procederá a extraer los datos.")
 
 año = datetime.now().year #año actual
 mes = datetime.now().month #mes actual
