@@ -4,7 +4,7 @@ name: ExtraerENSU
 # Controlar cuando correr el codigo, schedule para hora determinada y workflow para correrlo con boton
 on:
   schedule:
-    - cron: '0 17 * * *' 
+    - cron: '0 10 * * *' 
   workflow_dispatch: 
 
 permissions: 
