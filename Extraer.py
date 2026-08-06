@@ -10,13 +10,45 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils import get_column_letter
 
-calendario = {
-    "2026-10-23",
-    "2027-01-22",
-    "2027-04-23",
+#Se obtiene la fecha de la publicación del ENSU mediante web scraping de una api de la página de INEGI
+url_inegi = "https://www.inegi.org.mx/app/api/saladeprensa/api/saladeprensa/ObtenerFechasTabla/v3"
+
+#Se definen los parámetros de la solicitud
+payload = {
+    "fechaDesde": "0",
+    "fechaHasta": "0",
+    "titulo": "",
+    "idPrograma": 0,
+    "ordenarPor": "fecha",
+    "ordenarAsc": 0,
+    "desde": 0,
+    "tomar": 1000,
+    "ingles": 0,
+    "ambito": -1,
+    "tipoNoticia": "1,2,3,4,5,6,7,8"
 }
 
-if date.today().isoformat() not in calendario:
+#Se definen los encabezados de la solicitud
+headers = {
+    "X-Requested-With": "XMLHttpRequest",
+    "Referer": "https://www.inegi.org.mx/app/saladeprensa/calendario"
+}
+
+#Se realiza la solicitud POST a la API de INEGI
+r = requests.post(url_inegi, data=payload, headers=headers)
+
+datos = r.json() #Se obtiene la respuesta en formato JSON
+
+#Se recorre la lista de publicaciones obtenidas para encontrar la fecha de publicación del ENSU
+for publicacion in datos:
+    fecha = datetime.strptime(publicacion["fecha"], "%d/%m/%Y").date() #fecha de publicación, se convierte a objeto date
+    programa = publicacion["programa"] #Nombre del programa de la publicación
+    #Se busca que publicacion corresponde al ENSU, si se encuentra, se guarda la fecha y el nombre del programa
+    if "Encuesta Nacional de Seguridad Pública Urbana (ENSU)" in programa:
+        ensu_fecha = fecha
+        ensu_programa = programa
+
+if date.today().isoformat() != ensu_fecha.isoformat():
     print("No es fecha de actualización de datos.")
     exit(0)
 
