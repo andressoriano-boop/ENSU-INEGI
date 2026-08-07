@@ -10,6 +10,8 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils import get_column_letter
 
+import traceback
+
 #Se obtiene la fecha de la publicación del ENSU mediante web scraping de una api de la página de INEGI
 url_inegi = "https://www.inegi.org.mx/app/api/saladeprensa/api/saladeprensa/ObtenerFechasTabla/v3"
 
@@ -99,7 +101,8 @@ try:
 
 except zipfile.BadZipFile:
     print("Error: El archivo descargado no es un archivo zip válido.")
-    exit(1)
+    print(traceback.format_exc())
+    raise
 
 #Leer el archivo CSV extraído
 try:
@@ -110,7 +113,8 @@ try:
     df = pd.read_csv(leer)
 except Exception as e:
     print(f"Error al leer el archivo CSV: {e}")
-    exit(1)
+    print(traceback.format_exc())
+    raise
 
 #Extraer solo los datos de interés
 try:
