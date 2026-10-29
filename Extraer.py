@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 import requests
 import zipfile
@@ -15,16 +15,19 @@ import traceback
 #Se obtiene la fecha de la publicación del ENSU mediante web scraping de una api de la página de INEGI
 url_inegi = "https://www.inegi.org.mx/app/api/saladeprensa/api/saladeprensa/ObtenerFechasTabla/v3"
 
+ahora = datetime.now()
+fecha_hoy = ahora.strftime("%Y-%m-%d")
+
 #Se definen los parámetros de la solicitud
 payload = {
-    "fechaDesde": "0",
-    "fechaHasta": "0",
+    "fechaDesde": fecha_hoy,
+    "fechaHasta": fecha_hoy,
     "titulo": "",
     "idPrograma": 0,
     "ordenarPor": "fecha",
     "ordenarAsc": 0,
     "desde": 0,
-    "tomar": 1000,
+    "tomar": 100,
     "ingles": 0,
     "ambito": -1,
     "tipoNoticia": "1,2,3,4,5,6,7,8"
@@ -49,6 +52,9 @@ for publicacion in datos:
     if "Encuesta Nacional de Seguridad Pública Urbana (ENSU)" in programa:
         ensu_fecha = fecha
         ensu_programa = programa
+        break
+    ensu_fecha = datetime.strptime("01/01/2026", "%d/%m/%Y").date()
+    ensu_programa = 0
 
 if date.today().isoformat() != ensu_fecha.isoformat():
     print("No es fecha de actualización de datos.")
