@@ -44,6 +44,11 @@ r = requests.post(url_inegi, data=payload, headers=headers)
 
 datos = r.json() #Se obtiene la respuesta en formato JSON
 
+#Si no hay publicaciones hoy se le da 0 a ensu_fecha
+if len(datos) == 0:
+    ensu_fecha = datetime.strptime("01/01/2026", "%d/%m/%Y").date()
+    ensu_programa = 0
+
 #Se recorre la lista de publicaciones obtenidas para encontrar la fecha de publicación del ENSU
 for publicacion in datos:
     fecha = datetime.strptime(publicacion["fecha"], "%d/%m/%Y").date() #fecha de publicación, se convierte a objeto date
